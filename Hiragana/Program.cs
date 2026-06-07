@@ -16,9 +16,53 @@ string[] hiragana = [
     "z ざじずぜぞ", // 13
     "d だぢづでど", // 14
     "b ばびぶべぼ", // 15
-    "p ぱぴぷぺぽ" // 16
+    "p ぱぴぷぺぽ", // 16
+    "\nCombinations:", // the bool for if they have found anything about combinations
+    "   や   ゆ   よ",  // 18
+    "き きゃ きゅ きょ", // 19
+    "し しゃ しゅ しょ", // 20
+    "ち ちゃ ちゅ ちょ", // 21
+    "に にゃ にゅ にょ", // 22
+    "ひ ひゃ ひゅ ひょ", // 23
+    "み みゃ みゅ みょ", // 24
+    "り りゃ りゅ りょ", // 25
+    "ぎ ぎゃ ぎゅ ぎょ", // 26
+    "じ じゃ じゅ じょ", // 27
+    "び びゃ びゅ びょ", // 28
+    "ぴ ぴゃ ぴゅ ぴょ" // 29
     ];
-bool[] found = [true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+bool[] found = [
+    true, // 0
+    true, // 1
+    false, // 2
+    false, // 3
+    false, // 4
+    false, // 5
+    false, // 6
+    false, // 7
+    false, // 8
+    false, // 9
+    false, // 10
+    false, // dakuten
+    false, // 12
+    false, // 13
+    false, // 14
+    false, // 15
+    false, // 16
+    false, // combinations
+    false, // 18
+    false, // 19
+    false, // 20
+    false, // 21
+    false, // 22
+    false, // 23
+    false, // 24
+    false, // 25
+    false, // 26
+    false, // 27
+    false, // 28
+    false // 29
+    ];
 int current_room = 1;
 Main();
 void Main()
@@ -41,7 +85,15 @@ void Main()
                 );
             break;
         case 2:
-            Console.WriteLine("ROOM 2 TEXT");
+            Console.WriteLine(
+                "You make your way into the next room, the room looks almost identical to the previous room.\n" +
+                "\n" +
+                "You spot the next door, above it hangs yet another set of symbols that reads \"ありがと\"\n" +
+                "\n" +
+                "Press G to guess\n" +
+                "Press T to show the table\n" +
+                "Press S to search the room"
+                );
             break;
         case 3:
             Console.WriteLine("ROOM 3 TEXT");
@@ -76,13 +128,20 @@ void Table()
     Console.Clear();
     for (int i = 0; i < 11; i++)
     {
-        Console.WriteLine(found[i] ? hiragana[i]:"");
+        Console.WriteLine(found[i] ? hiragana[i] : "");
     }
     if (found[11]) //This is so that it won't show the dakuten before the player has found out about it
     {
-        for (int i = 11; i < hiragana.Length; i++)
+        for (int i = 11; i < 17; i++)
         {
-            Console.WriteLine(found[i] ? hiragana[i]:"");
+            Console.WriteLine(found[i] ? hiragana[i] : "");
+        }
+    }
+    if (found[17]) //This is so that it won't show the combinations before the player has found out about it
+    {
+        for (int i = 17; i < hiragana.Length; i++)
+        {
+            Console.WriteLine(found[i] ? hiragana[i] : "");
         }
     }
     Console.ReadLine();
@@ -92,30 +151,92 @@ void Table()
 void Guess()
 {
     Console.Clear();
-    Console.Write(
-        "すいか\n" +
-        "Please enter your guess: "
-        );
+    switch (current_room)
+    {
+        case 1:
+            Console.Write(
+                "すいか\n" +
+                "Please enter your guess: "
+                );
+            break;
+        case 2:
+            Console.Write(
+                "ありがと\n" +
+                "Please enter your guess: "
+                );
+            break;
+        case 3:
+            Console.Write(
+                "HIRAGANA\n" +
+                "Please enter your guess: "
+                );
+            break;
+    }
     string guess = Console.ReadLine();
     Console.Clear();
-    if (guess.ToLower() == "suika")
+    switch (current_room)
     {
-        Console.WriteLine(
-            "The door opens and you step into the next room.\n" +
-            "Press enter to continue"
-            );
-        Console.ReadLine();
-        current_room = 2;
-        (found[2], found[3]) = (true, true);
-        (found[12], found[13]) = (true, true);
-    }
-    else
-    {
-        Console.WriteLine(
-            "The lock does not open, guess was incorrect.\n" +
-            "Press enter to go back"
-            );
-        Console.ReadLine();
+        case 1:
+            if (guess.ToLower() == "suika")
+            {
+                Console.WriteLine(
+                    "The door opens and you step into the next room.\n" +
+                    "Press enter to continue"
+                    );
+                Console.ReadLine();
+                current_room = 2;
+                (found[2], found[3], found[11], found[12], found[13], found[19], found[20]) = (true, true, true, true, true, true, true);
+            }
+            else
+            {
+                Console.WriteLine(
+                    "The lock does not open, guess was incorrect.\n" +
+                    "Press enter to go back"
+                    );
+                Console.ReadLine();
+            }
+            break;
+        case 2:
+            if (guess.ToLower() == "arigato")
+            {
+                Console.WriteLine(
+                    "The door opens and you step into the next room.\n" +
+                    "Press enter to continue"
+                    );
+                Console.ReadLine();
+                current_room = 3;
+                (found[17], found[18]) = (true, true);
+                // (found[2], found[3], found[12], found[13]) = (true, true, true, true);
+            }
+            else
+            {
+                Console.WriteLine(
+                    "The lock does not open, guess was incorrect.\n" +
+                    "Press enter to go back"
+                    );
+                Console.ReadLine();
+            }
+            break;
+        case 3:
+            if (guess.ToLower() == "xxxxx")
+            {
+                Console.WriteLine(
+                    "The door opens and you step into the next room.\n" +
+                    "Press enter to continue"
+                    );
+                Console.ReadLine();
+                current_room = 4;
+                // (found[2], found[3], found[12], found[13]) = (true, true, true, true);
+            }
+            else
+            {
+                Console.WriteLine(
+                    "The lock does not open, guess was incorrect.\n" +
+                    "Press enter to go back"
+                    );
+                Console.ReadLine();
+            }
+            break;
     }
     Main();
 }
@@ -123,15 +244,34 @@ void Guess()
 void Search()
 {
     Console.Clear();
-    Console.WriteLine(
-        "You look around the room, you see a drawer, an unlocked safe and an envelope.\n" +
-        "\n" +
-        "Which do you search first?\n" +
-        "\n" +
-        "Press D to open the drawer\n" +
-        "Press S to open the safe\n" +
-        "Press E to read the envelope"
-        );
+    switch (current_room)
+    {
+        case 1:
+            Console.WriteLine(
+                "You look around the room, you see a drawer, an unlocked safe and an envelope.\n" +
+                "\n" +
+                "Which do you search first?\n" +
+                "\n" +
+                "Press D to open the drawer\n" +
+                "Press S to open the safe\n" +
+                "Press E to read the envelope"
+                );
+            break;
+        case 2:
+            Console.WriteLine(
+                "You look around the room, you see a dresser, a locked safe and another envelope.\n" +
+                "\n" +
+                "Which do you search?\n" +
+                "\n" +
+                "Press D to search through the dresser\n" +
+                "Press S to investigate the safe\n" +
+                "Press E to read the envelope"
+                );
+            break;
+        case 3:
+
+            break;
+    }
     ConsoleKeyInfo search = Console.ReadKey();
     Console.Clear();
     switch (search.Key)
@@ -149,10 +289,19 @@ void Search()
                         );
                     found[3] = true;
                     found[13] = true;
+                    found[19] = true;
                     break;
                 case 2:
                     // text
-                    // found
+                    Console.WriteLine(
+                        "You look through the dresser, it's mostly empty with a few dusty books lying around.\n" +
+                        "You find a small piece of paper with some more symbols on it.\n" +
+                        "\n" +
+                        "Press enter to continue"
+                        );
+                    found[4] = true;
+                    found[14] = true;
+                    found[21] = true;
                     break;
                 case 3:
                     //text
@@ -174,10 +323,13 @@ void Search()
                         );
                     found[2] = true;
                     found[12] = true;
+                    found[20] = true;
                     break;
                 case 2:
                     // text
-                    // found
+                    // add puzzle to unlock the safe
+                    found[9] = true;
+                    found[25] = true;
                     break;
                 case 3:
                     //text
@@ -192,7 +344,7 @@ void Search()
             {
                 case 1:
                     Console.WriteLine(
-                        "You open the envelope, inside is a a piece of paper with some text, it reads:\n" +
+                        "You open the envelope, inside is a piece of paper with some text, it reads:\n" +
                         "\n" +
                         "Hello, if you're reading this then it means that you've finally woken up.\n" +
                         "You have always wanted to learn how to read but you never really bothered to start, so I knocked you out and locked you in here.\n" +
@@ -207,6 +359,17 @@ void Search()
                     break;
                 case 2:
                     // text
+                    Console.WriteLine(
+                        "You open the envelope, inside is a piece of paper with some text, it reads:\n" +
+                        "\n" +
+                        "You managed to escape the first room, congrats.\n" +
+                        "But you still have a lot more to learn in order to escape.\n" +
+                        "\n" +
+                        "Hiragana has some special combinations.\n" +
+                        "These combinations work by taking characters from the i coloumn and combining those with one of the three y row characters.\n" +
+                        "The sound these combinations makes is usually straightforward, you take the vowel of the i column character along with the entire y row character."
+                        );
+                    (found[17], found[18]) = (true, true);
                     break;
                 case 3:
                     //text
